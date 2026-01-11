@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +14,15 @@
             color: white;
             font-family: monospace;
         }
+
         canvas#bg {
             position: fixed;
             top: 0;
             left: 0;
             outline: none;
+            z-index: 0;
         }
+
         #loader-container {
             position: fixed;
             top: 50%;
@@ -29,7 +33,8 @@
             padding: 2em;
             background-color: rgba(20, 20, 20, 0.8);
             border-radius: 8px;
-            z-index: 20; /* Ensure loader is also on top */
+            z-index: 20;
+            /* Ensure loader is also on top */
         }
 
         #control-panel {
@@ -41,16 +46,19 @@
             border-radius: 8px;
             border: 1px solid #444;
             width: 200px;
-            z-index: 10; /* --- ADD THIS LINE --- */
+            z-index: 100;
         }
+
         #control-panel div {
             margin-bottom: 15px;
         }
+
         #control-panel label {
             display: block;
             margin-bottom: 5px;
             font-size: 0.9em;
         }
+
         #control-panel input[type="range"] {
             width: 100%;
         }
@@ -58,21 +66,30 @@
         .explore-controls {
             position: fixed;
             bottom: 30px;
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             flex-direction: column;
             align-items: center;
-            z-index: 10;
+            display: none;
+            /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
         }
+
         #translation-controls {
             left: 30px;
         }
+
         #rotation-controls {
             right: 30px;
         }
+
         .d-pad-row {
             display: flex;
             justify-content: center;
         }
+
         .d-pad-button {
             width: 50px;
             height: 50px;
@@ -84,18 +101,22 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            user-select: none; /* Prevent text selection on hold */
+            user-select: none;
+            /* Prevent text selection on hold */
         }
+
         .d-pad-button:hover {
             background-color: rgba(255, 255, 255, 0.4);
         }
+
         .placeholder {
-            width: 52px; /* width + 2px border */
+            width: 52px;
+            /* width + 2px border */
             height: 52px;
         }
-
     </style>
 </head>
+
 <body>
     <div id="loader-container">
         <div id="loader-text">Loading Star Data...</div>
@@ -115,11 +136,51 @@
             <input type="range" id="density-slider" min="1" max="100" step="1" value="100">
         </div>
         <div>
-            <button id="reset-view-button" style="width: 100%; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Reset View</button>
+            <label for="size-scale-slider">Star Size Scale (Multiplier)</label>
+            <input type="range" id="size-scale-slider" min="1" max="100000000" step="1" value="1">
+            <div id="size-scale-display" style="font-size: 0.8em; margin-top:2px;">Multiplier: 1x</div>
         </div>
+        <div>
+            <div>
+                <button id="reset-view-button"
+                    style="width: 100%; padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer;">Reset
+                    View</button>
+            </div>
+            <div>
+                <button id="explore-mode-button"
+                    style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Explore
+                    Mode</button>
+            </div>
+            <div>
+                <input type="checkbox" id="pause-checkbox" style="width: auto;">
+                <label for="pause-checkbox" style="display: inline; margin-left: 5px;">Pause Animation</label>
+            </div>
+        </div>
+
     </div>
 
     <canvas id="bg"></canvas>
+
+    <div class="explore-controls" id="translation-controls">
+        <div style="margin-bottom: 10px; text-align: center; width: 100%;">
+            <label for="fly-speed-slider">Camera Speed</label>
+            <input type="range" id="fly-speed-slider" min="0" max="100" step="1" value="20" style="width: 100%;">
+            <div id="fly-speed-display" style="font-size: 0.9em; margin-top: 5px;">Speed: 0 pc/s</div>
+        </div>
+        <div class="d-pad-row">
+            <div class="d-pad-button" id="move-forward">W</div>
+        </div>
+        <div class="d-pad-row">
+            <div class="d-pad-button" id="move-left">A</div>
+            <div class="d-pad-button" id="move-backward">S</div>
+            <div class="d-pad-button" id="move-right">D</div>
+        </div>
+        <div class="d-pad-row" style="margin-top: 10px;">
+            <div class="d-pad-button" id="move-up">R</div>
+            <div class="placeholder" style="border:none"></div>
+            <div class="d-pad-button" id="move-down">F</div>
+        </div>
+    </div>
 
     <!-- Import 3js and OrbitControls -->
     <script type="importmap">
@@ -134,4 +195,5 @@
     <!-- Your main script -->
     <script type="module" src="main.js"></script>
 </body>
+
 </html>
