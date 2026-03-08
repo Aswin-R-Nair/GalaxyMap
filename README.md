@@ -1,6 +1,6 @@
 # GalaxyMap
 
-A 3D visualization of the Milky Way galaxy using real stellar data from the [ESA Gaia](https://www.cosmos.esa.int/web/gaia) space observatory. Every point of light is an actual star plotted at its calculated galactic position.
+A 3D visualization of the Milky Way galaxy using real stellar data from the [ESA Gaia](https://www.cosmos.esa.int/web/gaia) space observatory inspired by the galaxy map aboard the Normandy in the video game Mass Effect!. Every point of light is an actual star plotted at its calculated galactic position.
 
 Built with [Three.js](https://threejs.org/).
 
