@@ -114,6 +114,41 @@ function setupControls() {
     const exploreModeButton = document.getElementById('explore-mode-button');
     const pauseCheckbox = document.getElementById('pause-checkbox');
 
+    // --- Popup Handlers ---
+    const controlsPopup = document.getElementById('controls-popup');
+    const controlsPopupBtn = document.getElementById('controls-popup-btn');
+    const controlsPopupClose = document.getElementById('controls-popup-close');
+    const helpPopup = document.getElementById('help-popup');
+    const helpButton = document.getElementById('help-button');
+    const helpPopupClose = document.getElementById('help-popup-close');
+
+    function openPopup(popup) {
+        popup.classList.add('active');
+    }
+
+    function closePopup(popup) {
+        popup.classList.remove('active');
+    }
+
+    controlsPopupBtn.addEventListener('click', () => openPopup(controlsPopup));
+    controlsPopupClose.addEventListener('click', () => closePopup(controlsPopup));
+    controlsPopup.addEventListener('click', (e) => {
+        if (e.target === controlsPopup) closePopup(controlsPopup);
+    });
+
+    helpButton.addEventListener('click', () => openPopup(helpPopup));
+    helpPopupClose.addEventListener('click', () => closePopup(helpPopup));
+    helpPopup.addEventListener('click', (e) => {
+        if (e.target === helpPopup) closePopup(helpPopup);
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closePopup(controlsPopup);
+            closePopup(helpPopup);
+        }
+    });
+
     // Initialize timeScale based on initial slider value
     animationState.timeScale = logSlider(parseFloat(speedSlider.value));
 

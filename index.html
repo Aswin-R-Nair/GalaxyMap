@@ -114,6 +114,144 @@
             /* width + 2px border */
             height: 52px;
         }
+
+        /* --- Popup Overlay & Modal Styles --- */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background-color: rgba(25, 25, 30, 0.95);
+            border: 1px solid #555;
+            border-radius: 10px;
+            padding: 25px 30px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+            color: #ddd;
+            font-family: monospace;
+            position: relative;
+        }
+
+        .popup-content h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.3em;
+            color: #fff;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .popup-content h3 {
+            margin: 15px 0 8px 0;
+            font-size: 1em;
+            color: #aac8ff;
+        }
+
+        .popup-content p {
+            margin: 6px 0;
+            font-size: 0.85em;
+            line-height: 1.5;
+            color: #bbb;
+        }
+
+        .popup-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.4em;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        .popup-close-btn:hover {
+            color: #fff;
+        }
+
+        .keybind-row {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 0.85em;
+        }
+
+        .keybind-key {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 2px 8px;
+            min-width: 28px;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 0.9em;
+        }
+
+        .keybind-desc {
+            color: #bbb;
+        }
+
+        .popup-hint {
+            display: block;
+            margin-top: 6px;
+            color: #7eb8f7;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .controls-trigger-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+            font-family: monospace;
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .controls-trigger-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* Scrollbar styling for popups */
+        .popup-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .popup-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .popup-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .popup-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
     </style>
 </head>
 
@@ -152,6 +290,10 @@
                     Mode</button>
             </div>
             <div>
+                <button id="help-button"
+                    style="width: 100%; padding: 10px; background-color: #444; color: white; border: none; border-radius: 5px; cursor: pointer;">Help</button>
+            </div>
+            <div>
                 <input type="checkbox" id="pause-checkbox" style="width: auto;">
                 <label for="pause-checkbox" style="display: inline; margin-left: 5px;">Pause Animation</label>
             </div>
@@ -160,6 +302,73 @@
     </div>
 
     <canvas id="bg"></canvas>
+
+    <!-- Controls Popup -->
+    <div class="popup-overlay" id="controls-popup">
+        <div class="popup-content">
+            <button class="popup-close-btn" id="controls-popup-close">&times;</button>
+            <h2>Controls</h2>
+
+            <h3>Explore Mode - Movement</h3>
+            <div class="keybind-row"><span class="keybind-key">W</span><span class="keybind-desc">Move forward</span></div>
+            <div class="keybind-row"><span class="keybind-key">S</span><span class="keybind-desc">Move backward</span></div>
+            <div class="keybind-row"><span class="keybind-key">A</span><span class="keybind-desc">Move left</span></div>
+            <div class="keybind-row"><span class="keybind-key">D</span><span class="keybind-desc">Move right</span></div>
+            <div class="keybind-row"><span class="keybind-key">R</span><span class="keybind-desc">Move up</span></div>
+            <div class="keybind-row"><span class="keybind-key">F</span><span class="keybind-desc">Move down</span></div>
+
+            <h3>Explore Mode - Camera</h3>
+            <div class="keybind-row"><span class="keybind-key">Arrow Keys</span><span class="keybind-desc">Look up / down / left / right</span></div>
+            <div class="keybind-row"><span class="keybind-key">Q</span><span class="keybind-desc">Roll counter-clockwise</span></div>
+            <div class="keybind-row"><span class="keybind-key">E</span><span class="keybind-desc">Roll clockwise</span></div>
+            <div class="keybind-row"><span class="keybind-key">Click + Drag</span><span class="keybind-desc">Look around</span></div>
+            <div class="keybind-row"><span class="keybind-key">Speed Slider</span><span class="keybind-desc">Adjust movement speed</span></div>
+
+            <h3>Orbit Mode (Default)</h3>
+            <div class="keybind-row"><span class="keybind-key">Left Click + Drag</span><span class="keybind-desc">Rotate view</span></div>
+            <div class="keybind-row"><span class="keybind-key">Right Click + Drag</span><span class="keybind-desc">Pan view</span></div>
+            <div class="keybind-row"><span class="keybind-key">Scroll Wheel</span><span class="keybind-desc">Zoom in / out</span></div>
+
+            <p style="margin-top: 15px; color: #666; font-size: 0.8em;">Press Escape or click outside to close.</p>
+        </div>
+    </div>
+
+    <!-- Help Popup -->
+    <div class="popup-overlay" id="help-popup">
+        <div class="popup-content">
+            <button class="popup-close-btn" id="help-popup-close">&times;</button>
+            <h2>About This Simulation</h2>
+
+            <h3>Overview</h3>
+            <p>This is a 3D visualization of the Milky Way galaxy built with real stellar data from the ESA Gaia space observatory. Each point of light represents an actual star plotted at its calculated galactic position.</p>
+
+            <h3>Controls</h3>
+            <p><strong>Orbit Mode</strong> (default) lets you rotate, pan, and zoom with the mouse. <strong>Explore Mode</strong> switches to first-person fly controls so you can navigate through the star field using WASD/RF keys. Use the speed slider to go from a few AU/s up to 10,000 pc/s.</p>
+
+            <h3>Star Data</h3>
+            <p>Stars are loaded from the Gaia catalog with real astrometric measurements: right ascension, declination, parallax, apparent magnitude (G-band), and color index (BP-RP). Equatorial coordinates are transformed into galactic coordinates so the galaxy's disk structure is visible.<span class="popup-hint">You will notice the stars are clustered around a certain point &mdash; that's where the Earth is located. Try going there and looking around, make sure to have a real image of the Milky Way from Earth pulled up to compare views.</span></p>
+
+            <h3>Star Colors</h3>
+            <p>Star colors are derived from the Gaia BP-RP color index, which measures the difference between blue and red photometer magnitudes. Hot blue-white O/B-type stars have low BP-RP values, while cool red M-type stars have high values. The colors are interpolated along a realistic blackbody radiation sequence.</p>
+
+            <h3>Star Sizes &amp; Brightness</h3>
+            <p>Each star's on-screen size is based on its physical radius (scaled from 1 solar radius) with perspective projection - stars appear larger when closer. Brightness follows the inverse-square law using absolute magnitude, so intrinsically luminous stars appear brighter. The "Star Size Scale" slider multiplies the physical radius for visibility.<span class="popup-hint">Try flying around with 1x scale &mdash; you might not see many stars. Why is that?</span></p>
+
+            <h3>Galaxy Rotation</h3>
+            <p>The rotation speed slider animates differential galactic rotation. All stars share a base angular velocity, and the background Milky Way image rotates in sync. The simulation time can be paused with the checkbox.</p>
+
+            <h3>The Sun</h3>
+            <p>The green marker represents the Sun's position at approximately 8,200 parsecs from the galactic center. It orbits with the same angular velocity as the other stars.</p>
+
+            <h3>Galactic Center</h3>
+            <p>The golden ring at the origin marks the galactic center, representing the region around Sagittarius A*.</p>
+
+            <h3>Image Overlay</h3>
+            <p>The background image is an artist's impression of the Milky Way's spiral structure from above. The opacity slider lets you blend it with the real star data.</p>
+
+            <p style="margin-top: 15px; color: #666; font-size: 0.8em;">Press Escape or click outside to close.</p>
+        </div>
+    </div>
 
     <div class="explore-controls" id="translation-controls">
         <div style="margin-bottom: 10px; text-align: center; width: 100%;">
@@ -180,6 +389,7 @@
             <div class="placeholder" style="border:none"></div>
             <div class="d-pad-button" id="move-down">F</div>
         </div>
+        <button class="controls-trigger-btn" id="controls-popup-btn">Controls?</button>
     </div>
 
     <!-- Import 3js and OrbitControls -->
